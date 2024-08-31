@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>webpirate.gov</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZyMvMjAwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMCwwIEMzLjEsMzQuMSAxMiwwIDAsNTAgTDAsNTAgTDEwMCw1MCAwLDAsMEwgMiw2MEwgMCAwIiBzdHJva2U9IiMwMDAlIiBzdHJva2Utd2lkdGg9IjEwMCIgc3Ryb2tlLWxpbmVjbGFzcz0ic3Ryb2tlIiBzdHJva2Utbm9uZWFybmVzc3R5bGU9Im5vbmUiLz4KPC9zdmc+'); 
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: bottom;
+            position: relative; /* Permet le positionnement absolu du bouton */
+        }
+
+        .container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1; /* Assure que le contenu est au-dessus du fond */
+        }
+
+        .timer {
+            font-size: 24px;
+            color: red;
+            margin-bottom: 20px;
+            display: none; /* Caché par défaut */
+        }
+
+        .square {
+            width: 600px;
+            height: 150px;
+            background-color: lightgray;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: black;
+            font-weight: bold;
+            border-radius: 15px; /* Bords arrondis */
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: gray;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .button:disabled {
+            background-color: lightgray;
+            cursor: not-allowed;
+        }
+
+        .button:hover:not(:disabled) {
+            background-color: darkgray;
+        }
+
+        .discord-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #7289da; /* Couleur bleue Discord */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none; /* Enlève le soulignement du lien */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .discord-button:hover {
+            background-color: #5b6eae; /* Couleur bleue Discord au survol */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="countdown" class="timer"></div>
+        <div class="square" id="key-display"></div>
+        <button id="generate-btn" class="button" onclick="generateKey()">Generate Key</button>
+    </div>
+
+    <a href="https://discord.gg/xuFfrZhxAx" target="_blank" class="discord-button">
+        Discord
+    </a>
+
+    <script>
+        function generateKey() {
+            // Désactiver le bouton
+            const button = document.getElementById('generate-btn');
+            button.disabled = true;
+
+            // Génération de la clé
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let key = '';
+            for (let i = 0; i < 20; i++) {
+                key += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            document.getElementById('key-display').innerText = key;
+
+            // Affichage du compte à rebours
+            startCountdown();
+        }
+
+        function startCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.style.display = 'block'; // Affiche le compte à rebours
+            let time = 10 * 60; // 10 minutes en secondes
+
+            const interval = setInterval(() => {
+                const minutes = Math.floor(time / 60);
+                const seconds = time % 60;
+
+                countdownElement.innerText = `Temps restant : ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                
+                if (time <= 0) {
+                    clearInterval(interval);
+                    countdownElement.innerText = "Temps écoulé";
+
+                    // Réactiver le bouton après 10 minutes
+                    document.getElementById('generate-btn').disabled = false;
+                } else {
+                    time--;
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
